@@ -1,27 +1,19 @@
 const loginFormRef = document.querySelector('.login-form');
-let formObject = [];
 
 const onFormSubmit = (event) => {
-    let isValid = true;
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    formData.forEach((value, name) => {
-        formObject[name] =  value; 
-        if(!value) {
-          isValid = false;
-        }
-    });
-    
-    if (isValid) {
-        event.preventDefault();
-        console.log(formObject);
-        loginFormRef.reset();
-    } else {
-        alert('Пожалуйста, заполните ВСЕ поля');
-    };
+     event.preventDefault();
+     const formData = event.currentTarget.elements;
+     const email = formData.email.value;
+     const password = formData.password.value;
+     
+     if (email.length == 0 || password.length  == 0) {
+        alert('Пожалуйста, заполните ВСЕ поля'); 
+       }
+     else {
+        console.log({email, password});
+        event.currentTarget.reset();
+     }
 
  };
 
-loginFormRef.addEventListener('submit', onFormSubmit);
+ loginFormRef.addEventListener('submit', onFormSubmit);

@@ -2,68 +2,71 @@ const refs = {
 	createBoxes: document.querySelector('[data-create]'),
 	destroyBoxes: document.querySelector('[data-destroy]'),
 	numberBoxes: document.querySelector('input[type="number"]'),
-	parentBox: document.querySelector('#boxes'),
-};
+	parentBox: document.querySelector('#boxes'),	
+}
 
-let amount = 0;
-
-refs.numberBoxes.addEventListener('input', onInputGetQuantaty);
-refs.createBoxes.addEventListener('click', onCreateBoxesClick);
-refs.destroyBoxes.addEventListener('click', onDestroyBoxesClick);
+let boxSize = 30;
+let countBox = 0;
 
 function onInputGetQuantaty(event) {
-	amount = event.currentTarget.value;
+	countBox = event.currentTarget.value;
+	console.log("countBox => " + countBox);
 }
 
-function onCreateBoxesClick() {
-	if (!validateRange(amount)) {
-		destroyBoxes();
-	}
-	createBoxes(amount);
-  refs.numberBoxes.value = '';
-	amount = 0;
+refs.numberBoxes.addEventListener("input", onInputGetQuantaty);
+
+function getRandomHexColor ()  {
+	return `#${Math.floor(Math.random() * 16777215)
+		.toString(16)
+		.padStart(6, 0)}`;
 }
 
-function onDestroyBoxesClick() {
-	destroyBoxes();
-  refs.numberBoxes.value = '';
-	amount = 0;
-}
-
-function createBoxes(amount) {
-	const markup = [];
-	let boxSize = 30;
-
-	if (validateRange(amount)) {
-		alert('Пожалуйста, введите число от 1 до 100');
-		refs.numberBoxes.value = '';
-		return;
-	}
-
-	for (let i = 0; i < amount; i += 1) {
-		markup.push(
-			`<div style="width: ${boxSize}px; height: ${boxSize}px; background-color: ${getRandomHexColor()}"></div>`
-		);
-		boxSize += 10;
-	}
-
-	refs.parentBox.insertAdjacentHTML('afterbegin', markup.join``);
-}
-
-function validateRange(quantaty) {
+function validateRange (quantaty)  {
 	const min = Number(refs.numberBoxes.min);
 	const max = Number(refs.numberBoxes.max);
 
 	return quantaty < min || quantaty > max;
 }
 
-function destroyBoxes() {
-	refs.parentBox.innerHTML = '';
+function onCreateBoxesClick() {
+	if (validateRange(countBox)) {
+		alert('Пожалуйста, введите число от 1 до 100');
+		refs.numberBoxes.value = '';
+		return;
+	}
+	createBoxes(countBox);
+	refs.numberBoxes.value = '';
+	countBox = 0;
 }
 
-function getRandomHexColor() {
-	return `#${Math.floor(Math.random() * 16777215)
-		.toString(16)
-		.padStart(6, 0)}`;
+function createBoxes (amount)  {
+  for (let i = 0; i < amount; i++) {
+    boxSize += 10;
+    const newBox = document.createElement("div");
+    newBox.style.background = getRandomHexColor();
+    newBox.style.height = boxSize + "px";
+    newBox.style.width = boxSize + "px";
+    newBox.style.margin = "10px";
+    newBox.classList.add("new-box");
+    refs.parentBox.append(newBox);
+  }
 }
 
+refs.createBoxes.addEventListener("click", onCreateBoxesClick);
+
+function onDestroyBoxesClick() {
+	destroyBoxes () ;
+	refs.numberBoxes.value = '';
+	countBox = 0;
+	boxSize = 30;
+}
+
+function destroyBoxes () {
+  const allNewBoxes = document.querySelectorAll(".new-box");
+  for (let allNewBoxe of allNewBoxes) {
+    refs.parentBox.removeChild(allNewBoxe);
+  }
+};
+
+refs.destroyBoxes.addEventListener("click", onDestroyBoxesClick);
+ 
