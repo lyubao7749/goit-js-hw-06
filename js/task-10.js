@@ -10,7 +10,6 @@ let countBox = 0;
 
 function onInputGetQuantaty(event) {
 	countBox = event.currentTarget.value;
-	console.log("countBox => " + countBox);
 }
 
 refs.numberBoxes.addEventListener("input", onInputGetQuantaty);
@@ -46,8 +45,8 @@ function createBoxes (amount)  {
     newBox.style.background = getRandomHexColor();
     newBox.style.height = boxSize + "px";
     newBox.style.width = boxSize + "px";
-    newBox.style.margin = "10px";
-    newBox.classList.add("new-box");
+    newBox.style.margin = "5px";
+    newBox.classList.add("boxes__content");
     refs.parentBox.append(newBox);
   }
 }
@@ -62,7 +61,7 @@ function onDestroyBoxesClick() {
 }
 
 function destroyBoxes () {
-  const allNewBoxes = document.querySelectorAll(".new-box");
+  const allNewBoxes = document.querySelectorAll(".boxes__content");
   for (let allNewBoxe of allNewBoxes) {
     refs.parentBox.removeChild(allNewBoxe);
   }
